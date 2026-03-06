@@ -132,3 +132,29 @@ in2=unmapped/K1_R2.u.fq \
 out1=K1_R1.final.fastq \
 out2=K1_R2.final.fastq \
 outs=K1_singletons.fastq
+
+#The output files (*_R1.final.fastq, *_R2.final.fastq) were renamed again.
+mv K1_R1.fq.gz K1_post_high_R1.final.fastq
+mv K1_R2.fq.gz K1_post_high_R2.final.fastq
+mv K2_R1.fq.gz K2_post_high_R1.final.fastq
+mv K2_R2.fq.gz K2_post_high_R2.final.fastq
+mv K3_R1.fq.gz K3_pre_low_R1.final.fastq
+mv K3_R2.fq.gz K3_pre_low_R2.final.fastq
+mv K4_R1.fq.gz K4_post_low_R1.final.fastq
+mv K4_R2.fq.gz K4_post_low_R2.final.fastq
+mv K5_R1.fq.gz K5_pre_low_R1.final.fastq
+mv K5_R2.fq.gz K5_pre_low_R2.final.fastq
+mv K6_R1.fq.gz K6_post_low_R1.final.fastq
+mv K6_R2.fq.gz K6_post_low_R2.final.fastq
+mv K7_R1.fq.gz K7_pre_low_R1.final.fastq
+mv K7_R2.fq.gz K7_pre_low_R2.final.fastq
+mv K8_R1.fq.gz K8_post_low_R1.final.fastq
+mv K8_R2.fq.gz K8_post_low_R2.final.fastq
+mv K9_R1.fq.gz K9_pre_high_R1.final.fastq
+mv K9_R2.fq.gz K9_pre_high_R2.final.fastq
+mv K10_R1.fq.gz K10_pre_high_R1.final.fastq
+mv K10_R2.fq.gz K10_pre_high_R2.final.fastq
+mv K11_R1.fq.gz K11_pre_high_R1.final.fastq
+mv K11_R2.fq.gz K11_pre_high_R2.final.fastq
+mv K12_R1.fq.gz K12_post_high_R1.final.fastq
+mv K12_R2.fq.gz K12_post_high_R2.final.fastq
