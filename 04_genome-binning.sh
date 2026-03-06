@@ -81,4 +81,23 @@ K*.sort.bam
 
 mkdir bins
 metabat2 \
---inFile /mnt/hd
+--inFile /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+--outFile bins/coassembly_bin \
+--abdFile coassembly_2500.depth.txt \
+--minContig 2500
+
+mamba create -n checkm2 -c bioconda -c conda-forge checkm2
+mamba activate checkm2
+checkm2 database --download
+
+cd bins
+checkm2 predict --threads 8 --input /mnt/hd/poster_Binning/bins -x fa --output-directory /mnt/hd/poster_Binning/checkm_output
+
+cp quality_report.tsv quality_report_copy.tsv
+
+cat quality_report_copy.tsv | tr "\t" "," > quality_report2.csv
+
+echo "Quality" > MAGS_quality.csv
+
+awk -F, 'NR>1 {print $2 - (5 * $3)}' quality_report2.csv >> MAGS_quality.csv
+paste -d "," quality_report2.csv MAGS_quality.csv > quality_report2_with_quality.csv
