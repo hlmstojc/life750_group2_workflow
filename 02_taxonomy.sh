@@ -193,3 +193,46 @@ combine_bracken_outputs.py --files *_genus.bracken -o all_genus.bracken
 
 #Taxon name (1) and abundance count (4, 6, 8...26) columns were extracted.
 cut -f1,4,6,8,10,12,14,16,18,20,22,24,26 all_genus.bracken > all_genus_num.bracken
+
+R
+install.packages("dplyr")
+install.packages("tidyverse")
+install.packages("ggplot2")
+install.packages("vegan")
+
+genus <- read.table("all_genus_num.bracken", header = TRUE, sep = "\t", check.names = FALSE)
+
+dim(genus)
+head(genus[,1:5])
+colnames(genus)
+
+sample_cols <- setdiff(colnames(genus), "name")
+clean_names <- gsub("_genus\\.bracken_num$", "", sample_cols)
+colnames(genus)[colnames(genus) %in% sample_cols] <- col_names
+
+colnames(genus)
+
+sample_cols <- setdiff(colnames(genus), "name")
+
+genus_rel <- genus
+genus_rel[, sample_cols] <- genus_rel[, sample_cols] / colSums(genus_rel[, sample_cols])
+
+genus_rel$mean_abund <- rowMeans(genus_rel[, sample_cols])
+
+topN <- 15
+top_taxa <- genus_rel[order(genus_rel$mean_abund, decreasing = TRUE), "name"][1:topN]
+genus_rel$taxon_group <- ifelse(genus_rel$name %in% top_taxa, genus_rel$name, "Other")
+
+genus_sub <- genus_rel[, c("taxon_group", sample_cols)]
+
+genus_rel2 <- aggregate(. ~ taxon_group, data = genus_sub, FUN = sum)
+
+plot_df <- pivot_longer(genus_rel2, cols = -taxon group, names_to = "sample", values_to = "rel_abund")
+
+plot_df$time <-ifelse(grepl("_pre_", plot_df$sample), "pre", "post")
+plot_df$wl <- ifelse(grepl"_high$", plot_df$sample), "high", "low")
+
+library(ggplot2)
+ggplot(plot_df, aes(x = sample, y = rel_abund, fill = taxon_group)) + geom_col() + facet_grid(wl ~ time, scales = "free_x", space = "free_x") + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + labs(x = "Sample", y = "Relative abundance", fill = "Genus")
+
+
