@@ -235,4 +235,13 @@ plot_df$wl <- ifelse(grepl"_high$", plot_df$sample), "high", "low")
 library(ggplot2)
 ggplot(plot_df, aes(x = sample, y = rel_abund, fill = taxon_group)) + geom_col() + facet_grid(wl ~ time, scales = "free_x", space = "free_x") + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + labs(x = "Sample", y = "Relative abundance", fill = "Genus")
 
+library(vegan)
+genus_bca2 <- read.table("all_genus_num.bracken", header = TRUE, sep = "\t", check.names = FALSE)
+rownames(genus_bca2) <- genus_bca2$name
+genus_mat <- as.matrix(genus_bca2[, -1])
 
+dim(genus_mat)
+
+genus_rel2 <- genus_mat / colSums(genus_mat)
+
+bray_curtis <- vegdist(t(genus_rel2), method = "bray")
