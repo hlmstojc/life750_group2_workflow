@@ -1,84 +1,97 @@
+#STEP 6: Metagenome binning and MAGs quality assessment
+#Input: co-assembled contigs, final paired-end reads after host removal
+#Output: contig depth table, genome bins
+
 cd ..
 mkdir poster_Binning
 cd poster_Binning
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+#The co-assembled reads from the previous step were indexed for read mapping using BWA.
+bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa
+
+#Each reads were mapped back to the co-assembly using BWA MEM.
+#SAM files were converted to BAM, which were then converted to SORT BAM.
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K1_post_high_R1.final.fastq /mnt/hd/poster_removeHost/K1_post_high_R2.final.fastq > \
 K1.sam
 samtools view -bu K1.sam > K1.bam
 samtools sort K1.bam > K1.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K2_post_high_R1.final.fastq /mnt/hd/poster_removeHost/K2_post_high_R2.final.fastq > \
 K2.sam
 samtools view -bu K2.sam > K2.bam
 samtools sort K2.bam > K2.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K3_pre_low_R1.final.fastq /mnt/hd/poster_removeHost/K3_pre_low_R2.final.fastq > \
 K3.sam
 samtools view -bu K3.sam > K3.bam
 samtools sort K3.bam > K3.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K4_post_low_R1.final.fastq /mnt/hd/poster_removeHost/K4_post_low_R2.final.fastq > \
 K4.sam
 samtools view -bu K4.sam > K4.bam
 samtools sort K4.bam > K4.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K5_pre_low_R1.final.fastq /mnt/hd/poster_removeHost/K5_pre_low_R2.final.fastq > \
 K5.sam
 samtools view -bu K5.sam > K5.bam
 samtools sort K5.bam > K5.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K6_post_low_R1.final.fastq /mnt/hd/poster_removeHost/K6_post_low_R2.final.fastq > \
 K6.sam
 samtools view -bu K6.sam > K6.bam
 samtools sort K6.bam > K6.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K7_pre_low_R1.final.fastq /mnt/hd/poster_removeHost/K7_pre_low_R2.final.fastq > \
 K7.sam
 samtools view -bu K7.sam > K7.bam
 samtools sort K7.bam > K7.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K8_post_low_R1.final.fastq /mnt/hd/poster_removeHost/K8_post_low_R2.final.fastq > \
 K8.sam
 samtools view -bu K8.sam > K8.bam
 samtools sort K8.bam > K8.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K9_pre_high_R1.final.fastq /mnt/hd/poster_removeHost/K9_pre_high_R2.final.fastq > \
 K9.sam
 samtools view -bu K9.sam > K9.bam
 samtools sort K9.bam > K9.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K10_pre_high_R1.final.fastq /mnt/hd/poster_removeHost/K10_pre_high_R2.final.fastq > \
 K10.sam
 samtools view -bu K10.sam > K10.bam
 samtools sort K10.bam > K10.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K11_pre_high_R1.final.fastq /mnt/hd/poster_removeHost/K11_pre_high_R2.final.fastq > \
 K11.sam
 samtools view -bu K11.sam > K11.bam
 samtools sort K11.bam > K11.sort.bam
 
-bwa index /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
+bwa mem /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
 /mnt/hd/poster_removeHost/K12_post_high_R1.final.fastq /mnt/hd/poster_removeHost/K12_post_high_R2.final.fastq > \
 K12.sam
 samtools view -bu K12.sam > K12.bam
 samtools sort K12.bam > K12.sort.bam
 
+#To calculate contig depth across samples, coverage depth was summarised across all the sorted BAM files.
+#Please note, only contigs of length greater than 2500 bp were retained for binning.
 jgi_summarize_bam_contig_depths \
 --minContigLength 2500 \
 --outputDepth coassembly_2500.depth.txt \
 K*.sort.bam
 
+#Contigs were binned into metagenome-assembled genomes (MAGs).
+#For this purpose, MetaBAT2 was used.
 mkdir bins
 metabat2 \
 --inFile /mnt/hd/poster_Assembly/coassembly_megahit/final.contigs.fa \
@@ -86,10 +99,12 @@ metabat2 \
 --abdFile coassembly_2500.depth.txt \
 --minContig 2500
 
+#CheckM2 was installed and activated using mamba, alongside its database.
 mamba create -n checkm2 -c bioconda -c conda-forge checkm2
 mamba activate checkm2
 checkm2 database --download
 
+#CheckM2 was then used to estimate genome completeness and contamination of the bins generated with MetaBAT2.
 cd bins
 checkm2 predict --threads 8 --input /mnt/hd/poster_Binning/bins -x fa --output-directory /mnt/hd/poster_Binning/checkm_output
 
