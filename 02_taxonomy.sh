@@ -259,3 +259,7 @@ variance_explanation <- 100 * pcoa$eig / sum(pcoa$eig)
 
 library(ggplot2)
 ggplot(points, aes(x = PCoA1, y = PCoA2, colour = wl, shape = time)) + geom_point(size = 3) + geom_text(aes(label = sample), vjust = -0.8, size = 5) + labs(x = "PCoA1", y = "PCoA2") + theme_classic()
+
+data <- data.frame(sample = rownames(points), time = points$time, wl = points$wl)
+rownames(data) <- data$sample
+adonis2(bray_curtis ~ time * wl, data = data)
