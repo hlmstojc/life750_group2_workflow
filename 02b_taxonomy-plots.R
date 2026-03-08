@@ -9,6 +9,9 @@ install.packages("tidyverse")
 install.packages("ggplot2")
 install.packages("vegan")
 
+library(dplyr)
+library(tidyverse)
+
 #The genus-level combined Bracken abundance table was imported and its dimensions/columns/column names checked.
 genus <- read.table("all_genus_num.bracken", header = TRUE, sep = "\t", check.names = FALSE)
 dim(genus)
@@ -61,6 +64,7 @@ dim(genus_mat)
 genus_rel2 <- genus_mat / colSums(genus_mat)
 
 #Bray-Curtis dissimilarity score was calculated using vegdist (https://www.geeksforgeeks.org/r-machine-learning/how-to-calculate-bray-curtis-dissimilarity-in-r/).
+#The t() function was used to 'swap' so that columns are rows, and rows-columns (https://libraryguides.mcgill.ca/c.php?g=699776&p=4968549).
 bray_curtis <- vegdist(t(genus_rel2), method = "bray")
 
 #Principal coordinate analysis (PCoA) was then performed to visualise the beta-diversity relationships calculated (Bray-Curtis dissimilarity).
@@ -76,11 +80,16 @@ points$sample <- rownames(points)
 points$time <- ifelse(grepl("_pre_", points$sample), "pre", "post")
 points$wl <- ifelse(grepl("_high$", points$sample), "high", "low")
 
+#How much variation each of the two PCoA axes 'explains' (expressed as %) was then calculated.
+#(https://ourcodingclub.github.io/tutorials/ordination/).
 variance_explanation <- 100 * pcoa$eig / sum(pcoa$eig)
 
+#This was then visualised on a plot using the function ggplot.
+#Please note, the axis labels were 'cleaned up'/updated using PowerPoint/Paint.
 library(ggplot2)
 ggplot(points, aes(x = PCoA1, y = PCoA2, colour = wl, shape = time)) + geom_point(size = 3) + geom_text(aes(label = sample), vjust = -0.8, size = 5) + labs(x = "PCoA1", y = "PCoA2") + theme_classic()
 
+#PERMANOVA was performed using the calculation from Bray-Curtis (https://uw.pressbooks.pub/appliedmultivariatestatistics/chapter/permanova/; https://stats.stackexchange.com/questions/531348/investigate-significance-of-adonis-permanova-coefficients).
 data <- data.frame(sample = rownames(points), time = points$time, wl = points$wl)
 rownames(data) <- data$sample
 adonis2(bray_curtis ~ time * wl, data = data)
