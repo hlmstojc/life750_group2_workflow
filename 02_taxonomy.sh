@@ -245,3 +245,17 @@ dim(genus_mat)
 genus_rel2 <- genus_mat / colSums(genus_mat)
 
 bray_curtis <- vegdist(t(genus_rel2), method = "bray")
+
+pcoa <- cmdscale(bray_curtis, k = 2, eig = TRUE)
+
+points <- as.data.frame(pcoa$points)
+colnames(points) <- c("PCoA1", "PCoA2")
+points$sample <- rownames(points)
+
+points$time <- ifelse(grepl("_pre_", points$sample), "pre", "post")
+points$wl <- ifelse(grepl("_high$", points$sample), "high", "low")
+
+variance_explanation <- 100 * pcoa$eig / sum(pcoa$eig)
+
+library(ggplot2)
+ggplot(points, aes(x = PCoA1, y = PCoA2, colour = wl, shape = time)) + geom_point(size = 3) + geom_text(aes(label = sample), vjust = -0.8, size = 5) + labs(x = "PCoA1", y = "PCoA2") + theme_classic()
