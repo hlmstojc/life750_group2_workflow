@@ -1,3 +1,10 @@
+#STEP 5: Co-assembly of host-removed reads.
+#Co-assembly was opted for to improve the assembly of low abundance organisms and to improve genome binning.
+#Input: final, paired-end reads following trimming and host removal.
+#Output: co-assembled contigs from MEGAHIT.
+
+#A  new directory was made to store the future contigs.
+#The final, paired-end reads following trimming and host removal were copied from poster_removeHost into the new directory.
 cd ..
 mkdir poster_Assembly
 
@@ -5,6 +12,7 @@ cd ..
 cd poster_removeHost
 cp *final.fastq /mnt/hd/poster_Assembly
 
+#In the new directory, forward and reverse reads were defined for co-assembly and metagenome co-assembly was performed with MEGAHIT.
 cd ..
 cd poster_Assembly
 
@@ -17,6 +25,7 @@ megahit \
 -o coassembly_megahit \
 -t 8
 
+#Co-assembly quality was assessed with QUAST, which was opened in browser (Firefox).
 mkdir -p quast_coassembly
 quast -o quast_coassembly coassembly_megahit/final.contigs.fa
 
