@@ -44,26 +44,35 @@ plot_df <- pivot_longer(genus_rel2, cols = -taxon_group, names_to = "sample", va
 plot_df$time <-ifelse(grepl("_pre_", plot_df$sample), "pre", "post")
 plot_df$wl <- ifelse(grepl("_high$", plot_df$sample), "high", "low")
 
+#The relative abundance of genera in the samples were visualised on a stacked bar plot using ggplot2.
+#Please note, the generated plot was additionally adjusted in PowerPoint.
 library(ggplot2)
 ggplot(plot_df, aes(x = sample, y = rel_abund, fill = taxon_group)) + geom_col() + facet_grid(wl ~ time, scales = "free_x", space = "free_x") + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + labs(x = "Sample", y = "Relative abundance", fill = "Genus")
 
+#To perform beta diversity analysis (Bray Curtis dissimilarity), the genus abundance table from the combined Bracken reports was once again imported and converted to a matrix.
+#The function as.matrix was used (https://www.geeksforgeeks.org/r-language/convert-an-object-into-a-matrix-in-r-programming-as-matrix-function/).
 library(vegan)
 genus_bca2 <- read.table("all_genus_num.bracken", header = TRUE, sep = "\t", check.names = FALSE)
 rownames(genus_bca2) <- genus_bca2$name
 genus_mat <- as.matrix(genus_bca2[, -1])
-
 dim(genus_mat)
 
+#As before, counts were converted to relative abundance.
 genus_rel2 <- genus_mat / colSums(genus_mat)
 
+#Bray-Curtis dissimilarity score was calculated using vegdist (https://www.geeksforgeeks.org/r-machine-learning/how-to-calculate-bray-curtis-dissimilarity-in-r/).
 bray_curtis <- vegdist(t(genus_rel2), method = "bray")
 
+#Principal coordinate analysis (PCoA) was then performed to visualise the beta-diversity relationships calculated (Bray-Curtis dissimilarity).
+#(https://riffomonas.org/code_club/2022-02-10-pcoa; https://www.biostars.org/p/9587994/).
 pcoa <- cmdscale(bray_curtis, k = 2, eig = TRUE)
 
 points <- as.data.frame(pcoa$points)
 colnames(points) <- c("PCoA1", "PCoA2")
 points$sample <- rownames(points)
 
+#As before, samples were then grouped by time-point (samples collected before exposure to diet - "pre", samples collected 3 months on the diet - "post") and by weight loss ("high" or "low").
+#Here, grepl was used (https://www.geeksforgeeks.org/r-language/difference-between-grep-vs-grepl-in-r/).
 points$time <- ifelse(grepl("_pre_", points$sample), "pre", "post")
 points$wl <- ifelse(grepl("_high$", points$sample), "high", "low")
 
